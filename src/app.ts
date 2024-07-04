@@ -1,12 +1,16 @@
 import express from "express";
-import marketersController from './controllers/marketersController';
+import bodyParser from 'body-parser';
+import routes from './routes/index';
+
+
 
 const app = express();
 
 //middleware
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 //Routes
-app.use('/', marketersController)
+app.use('/', routes);
 
 export default app;

@@ -1,23 +1,26 @@
 import express, {Request, Response } from 'express';
 
-const router = express.Router();
 
+export const handleSignup = async (req: Request, res: Response) => {
+    const { userEmail } = req.body;
 
-router.post('/trigger-event', async (req: Request, res: Response) => {
     try {
-        const { eventName, userEmail} = req.body;
-    
-     //check inputs
-    if (!eventName || !userEmail){
-        return res.status(400).json({ error: 'eventName and userEmail are required' });
+         
+        res.status(200).send('Sign Up Successful');
+    } catch (error) {
+        console.error('Error handling signup', error);
+        res.status(500).send('Internal server error');
     }
-  //sucessful
-    res.sendStatus(200);
-} catch (err) {
-    console.error('Error triggering marketing flow:', err);
-    res.status(500).json({ error: 'Internal server error' });
-}
-});
+};
 
+export const handlePurchase = async (req: Request, res: Response) => {
+    const { userEmail } = req.body;
 
-export default router;
+    try {
+        res.status(200).send('Purchase handled')
+    }
+    catch (error) {
+        console.error('Error handling purchase', error);
+        res.status(500).send('Internal server error');
+    }
+};
