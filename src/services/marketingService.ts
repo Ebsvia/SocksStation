@@ -1,5 +1,5 @@
 import { Action, MarketingFlow } from "../types/marketingTypes";
-import { sendEmail } from "./emailService"; 
+import { sendEmail } from "./emailService";
 
 const flow1: MarketingFlow = {
   event: "websiteSignup",
@@ -47,15 +47,23 @@ export const executeFlow = async (
         throw new Error(`Unsupported event: ${eventName}`);
     }
 
+    actions.forEach((action, index) => {
+      console.log(`Action ${index + 1}:`, action);
+    });
+
     for (const action of actions) {
       if (action.type === "email") {
         const { subject, body } = action;
         await sendEmail(subject, body, userEmail);
+        console.log(`Email sent successfully to ${userEmail}`);
       } else if (action.type === "timer") {
         const { delayInHours } = action;
-        await new Promise((resolve) => setTimeout(resolve, delayInHours));
+        await new Promise((resolve) => setTimeout(resolve, delayInHours)); 
+        console.log(`Timer delay completed: ${delayInHours} hours`);
       }
     }
+
+    console.log(`Execution completed for event: ${eventName}`);
   } catch (error) {
     console.error(`Error executing marketing flow for ${eventName}:`, error);
     throw error;

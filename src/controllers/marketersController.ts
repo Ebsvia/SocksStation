@@ -1,4 +1,3 @@
-// src/controllers/marketingController.ts
 
 import { Request, Response } from 'express';
 import { executeFlow } from '../services/marketingService';
