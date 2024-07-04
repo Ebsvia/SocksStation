@@ -9,7 +9,7 @@ An email automation workflow service that executes flows based on known events
 
 ## Testing
 
-Run tests using `npm test`.
+Run tests using `npm run test`in the root folder.
 
 ### Prerequisites
 
