@@ -1,26 +1,23 @@
-import express, {Request, Response } from 'express';
+// src/controllers/marketingController.ts
 
+import { Request, Response } from 'express';
+import { executeFlow } from '../services/marketingService';
 
-export const handleSignup = async (req: Request, res: Response) => {
-    const { userEmail } = req.body;
+// Controller function to execute marketing flow
+export const executeMarketingFlow = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { eventName, userEmail } = req.body;
 
-    try {
-         
-        res.status(200).send('Sign Up Successful');
-    } catch (error) {
-        console.error('Error handling signup', error);
-        res.status(500).send('Internal server error');
+    if (!eventName || !userEmail) {
+      res.status(400).json({ error: 'Missing eventName or userEmail in request body' });
+      return;
     }
-};
 
-export const handlePurchase = async (req: Request, res: Response) => {
-    const { userEmail } = req.body;
+    await executeFlow(eventName, userEmail);
 
-    try {
-        res.status(200).send('Purchase handled')
-    }
-    catch (error) {
-        console.error('Error handling purchase', error);
-        res.status(500).send('Internal server error');
-    }
+    res.status(200).json({ message: 'Marketing flow executed successfully' });
+  } catch (error) {
+    console.error('Error executing marketing flow:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 };
