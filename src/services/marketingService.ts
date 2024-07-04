@@ -1,44 +1,46 @@
-
-import { Action, MarketingFlow } from '../types/marketingTypes';
-import { sendEmail } from './emailService'; // Assuming this function is implemented
+import { Action, MarketingFlow } from "../types/marketingTypes";
+import { sendEmail } from "./emailService"; 
 
 const flow1: MarketingFlow = {
-  event: 'user_signup',
+  event: "websiteSignup",
   actions: [
-    { type: 'timer', delayInHours: 2 }, // 2 hours
+    { type: "timer", delayInHours: 2 }, // 2 hours
     {
-      type: 'email',
-      subject: 'Welcome to Sock Station Store!',
-      body: 'Thank you for signing up. Keep warm and enjoy your socks!',
+      type: "email",
+      subject: "Welcome to Sock Station Store!",
+      body: "Thank you for signing up. Keep warm and enjoy your socks!",
     },
   ],
 };
 
 const flow2: MarketingFlow = {
-  event: 'purchase_made',
+  event: "socksPurchased",
   actions: [
     {
-      type: 'email',
-      subject: 'Payment Received for Your Socks',
-      body: 'Thank you for your purchase. We have received your payment.',
+      type: "email",
+      subject: "Payment Received for Your Socks",
+      body: "Thank you for your purchase. We have received your payment.",
     },
     {
-      type: 'email',
-      subject: 'Your Socks Have Been Dispatched!',
-      body: 'Your socks are on their way to you. Enjoy!',
+      type: "email",
+      subject: "Your Socks Have Been Dispatched!",
+      body: "Your socks are on their way to you. Enjoy!",
     },
   ],
 };
 
-export const executeFlow = async (eventName: string, userEmail: string): Promise<void> => {
+export const executeFlow = async (
+  eventName: string,
+  userEmail: string
+): Promise<void> => {
   try {
     let actions: Action[] = [];
 
     switch (eventName) {
-      case 'user_signup':
+      case "websiteSignup":
         actions = flow1.actions;
         break;
-      case 'purchase_made':
+      case "socksPurchased":
         actions = flow2.actions;
         break;
       default:
@@ -46,13 +48,12 @@ export const executeFlow = async (eventName: string, userEmail: string): Promise
     }
 
     for (const action of actions) {
-      if (action.type === 'email') {
+      if (action.type === "email") {
         const { subject, body } = action;
         await sendEmail(subject, body, userEmail);
-      } else if (action.type === 'timer') {
+      } else if (action.type === "timer") {
         const { delayInHours } = action;
-        const delayMilliseconds = delayInHours * 60 * 60 * 1000; // Convert hours to milliseconds
-        await new Promise(resolve => setTimeout(resolve, delayMilliseconds));
+        await new Promise((resolve) => setTimeout(resolve, delayInHours));
       }
     }
   } catch (error) {
